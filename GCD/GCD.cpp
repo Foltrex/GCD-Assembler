@@ -31,36 +31,29 @@ public:
 };
 
 
-int findGCD_A(int x, int y) {
-    int nod;
+int findGCD_A(unsigned int x, unsigned int y) {
     _asm {
-        mov eax, x;
-        mov edx, y;
-    cikl:
-        cmp eax, edx; сравнение регистра eax с edx
-            je the_end; если eax = edx, то "прыгаем" в the_end
-            jl metka; если eax < edx, то "прыгаем" в metka
-            sub eax, edx;
-        jmp cikl;
-    metka:
-        sub edx, eax;
-        jmp cikl;
-    the_end:
-        mov nod, eax;
+        mov eax, x
+        mov edx, 0
+        cikl:
+        cmp y, 0
+            je the_end
+            idiv y
+            mov eax, y
+            mov y, edx
+            mov edx, 0
+        jmp cikl
+        
+       the_end:
+            mov y, eax
     }
-    return nod;
+    return y;
 }
 
+
+// tail recursion, which is executed as a loop
 int findaGCD_C(int x, int y) {
-    while (x != y) {
-        if (x >= y) {
-            x -= y;
-        }
-        else {
-            y -= x;
-        }
-    }
-    return x;
+    return y ? findaGCD_C(y, x % y) : x;
 }
 
 int main()
